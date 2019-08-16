@@ -1,4 +1,4 @@
-from fastText import FastText
+from fasttext import FastText
 from sklearn.metrics import pairwise_distances
 import pandas as pd
 import numpy as np
@@ -6,6 +6,7 @@ from flask import Flask, jsonify
 from flask_restful import reqparse, abort, Api, Resource
 import json
 import jellyfish
+from pathlib import Path
 
 app = Flask(__name__)
 api = Api(app)
@@ -13,10 +14,17 @@ api = Api(app)
 parser = reqparse.RequestParser()
 parser.add_argument('raw_address')
 
-gnaf_addresses = pd.read_csv('app/files/gnaf_addresses.csv', low_memory=False)
-mdl = FastText.load_model('app/files/address_resolver.mdl')
-address_vecs = np.load('app/files/address_vecs.npy')
-concat_address = pd.read_csv('app/files/address_clean.txt', header=None)[0]
+if Path.cwd().name == 'app':
+    base_path = Path('.')
+else:
+    base_path = Path('app')
+    
+files_path = base_path / 'files/'
+
+gnaf_addresses = pd.read_csv(files_path / 'gnaf_addresses.csv', low_memory=False)
+mdl = FastText.load_model(str(files_path / 'address_resolver.mdl'))
+address_vecs = np.load(files_path / 'address_vecs.npy')
+concat_address = pd.read_csv(files_path / 'address_clean.txt', header=None)[0]
 
 
 class AddressResolver(Resource):
@@ -57,5 +65,5 @@ api.add_resource(AddressResolver, '/')
 
 
 
-if __name__ == '__main__':
-    app.run(host="0.0.0.0", port=80, debug=True)
+# if __name__ == '__main__':
+#     app.run(host="0.0.0.0", port=5555, debug=True)
