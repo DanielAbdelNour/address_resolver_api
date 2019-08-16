@@ -1,4 +1,5 @@
 app/files/*
+!app/files/.gitkeep
 .DS_Store
 
 
