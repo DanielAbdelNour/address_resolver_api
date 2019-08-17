@@ -7,9 +7,11 @@ from flask_restful import reqparse, abort, Api, Resource
 import json
 import jellyfish
 from pathlib import Path
+from flask_cors import CORS
 
 app = Flask(__name__)
 api = Api(app)
+CORS(app)
 
 parser = reqparse.RequestParser()
 parser.add_argument('raw_address')

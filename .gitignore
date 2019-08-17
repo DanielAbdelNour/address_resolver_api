@@ -1,6 +1,8 @@
 app/files/*
 !app/files/.gitkeep
 .DS_Store
+venv
+.vscode
 
 
 # Byte-compiled / optimized / DLL files
